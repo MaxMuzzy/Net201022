@@ -14,6 +14,9 @@ public class CreateAccountWindow : AccountDataWindowBase
 
     private string _email;
 
+    [SerializeField]
+    protected TMP_Text _loadingText;
+
     protected override void SubscribeUIElements()
     {
         base.SubscribeUIElements();
@@ -29,6 +32,7 @@ public class CreateAccountWindow : AccountDataWindowBase
 
     private void CreateAccount()
     {
+        _loadingText.enabled = true;
         PlayFabClientAPI.RegisterPlayFabUser(new RegisterPlayFabUserRequest
         {
             Username = _username,
@@ -36,6 +40,7 @@ public class CreateAccountWindow : AccountDataWindowBase
             Password = _password
         }, result =>
         {
+            _loadingText.enabled = false;
             Debug.Log($"Successful creation: {_username}");
             EnterInGameScene();
         }, error =>
