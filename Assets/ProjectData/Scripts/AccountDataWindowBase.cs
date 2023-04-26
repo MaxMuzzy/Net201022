@@ -1,7 +1,9 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using PlayFab;
+using PlayFab.ClientModels;
+using System.Collections.Generic;
 
 public class AccountDataWindowBase : MonoBehaviour
 {
@@ -38,5 +40,28 @@ public class AccountDataWindowBase : MonoBehaviour
     protected void EnterInGameScene()
     {
         SceneManager.LoadScene(1);
+        //третий пункт дз
+        SetUserData();
+    }
+
+    private void SetUserData() 
+    {
+        PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest
+        {
+            Data = new Dictionary<string, string>
+            {
+                { "Health", "100" }
+            }
+        },
+        result =>
+        {
+            Debug.Log("SetUserData");
+        }, OnError);
+    }
+
+    private void OnError(PlayFabError error)
+    {
+        var errorMessage = error.GenerateErrorReport();
+        Debug.LogError(errorMessage);
     }
 }
